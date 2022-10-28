@@ -4,6 +4,8 @@ import numpy as np
 import concurrent.futures
 import os
 import sys
+from RestrictedPython import compile_restricted
+from RestrictedPython import safe_globals
 
 # Get ./src/ folder & add it to path
 current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -163,23 +165,25 @@ class BlindRunner(object):
 #takes in string for class that is to be tested.
 #Class must be named "TestRunner"
 #returns a time (None if failed)
+#numpy autoimported as np
 def testInput(input, args = None):
     if (args):
         pass #do more stuff here i guess
-    input = "import numpy as np\n"+input
-    try:
-        with open("testRuns.py","w+") as book:
-            book.write(input)
-
-        import testRuns
-
-        runner = BlindRunner(RACETRACK, [testRuns.TestRunner()])
-        return runner.run()
-    except:
-        print("Your code failed to compile. \nL.")
-        print("We generated:\n"+input.__repr__())
-        return None
     
+    #with open("testRuns.py","w+") as book:
+    #    book.write(input)
+    #import testRuns
+    byte_code = compile_restricted(input, '<inline>', 'exec')
+    loc = {}
+    
+    safe_globals["np"] = np
+    safe_globals['__name__'] = 'restricted namespace'
+    safe_globals['__metaclass__'] = type
+    exec(byte_code, safe_globals, loc)
+
+    runner = BlindRunner(RACETRACK, [ loc['TestRunner'] ])
+    return runner.run()
+
 ans = """
 class TestRunner:
     BUBBLE_RADIUS = 160
