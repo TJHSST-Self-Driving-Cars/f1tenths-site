@@ -125,8 +125,15 @@ class BlindRunner(object):
 
         laptime = 0.0
         start = time.time()
-
+        curr = start
         while not done:
+            if (time.time() - curr > 0.01):
+                #timeout
+                print("Timed out :(")
+                return -1
+            else:
+                curr = time.time()
+
             actions = []
             futures = []
             with concurrent.futures.ThreadPoolExecutor() as executor:
