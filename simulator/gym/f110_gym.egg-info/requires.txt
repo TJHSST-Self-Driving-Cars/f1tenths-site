@@ -5,3 +5,4 @@ scipy
 numba
 pyglet
 pyyaml
+RestrictedPython

@@ -273,7 +273,8 @@ class TestRunner:
             speed = self.STRAIGHTS_SPEED
         return speed, steering_angle
 """
-
+def testCode():
+    return testInput(ans)
 if __name__ == '__main__':
     print(testInput(ans))
     #runner = GymRunner(RACETRACK, drivers)
