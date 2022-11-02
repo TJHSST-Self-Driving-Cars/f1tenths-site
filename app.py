@@ -33,34 +33,56 @@ def simulate(code):
     return process.get()
 
 class Item:
-    def __init__(self,name,rank,time):
+    def __init__(self,name,time):
         self.name=name
-        self.rank=int(rank)
         self.time=int(time)
+        self.rank=0
+    def __repr__(self):
+        return self.name+" "+str(self.time)
     def __lt__(self,other):
         return self.time < other.time
 
 
 items = [         
-         Item("Vrishak", '2',"6"),
-         Item('Krishnan', '3','9'),
-         Item('Me', '1','5')]
+         Item("Vrishak","6"),
+         Item('Krishnan','9'),
+         Item('Me','11')]
 
 def readPlayers():
-    file = open('members.pickle', 'rb')
-    object = pickle.load(file)
-    object.sort()
-    for i in range(len(object)):
-        object[i].rank=i+1
-    return object
+    try:
+        file = open('members.pickle', 'rb')
+        o = pickle.load(file)
+        
+        return o
+    except FileNotFoundError:
+        pass
+    except EOFError:
+        pass
+    return []
 
 def writePlayers(items):
+    items.sort()
+    for i in range(len(items)):
+        items[i].rank=i+1
     file = open('members.pickle', 'wb+') 
     pickle.dump(items, file)
     file.close()
 
+def appendPlayer(item):
+    l = readPlayers()
+    #print("L\n\n",l,"\n\n")
+    inTab = False
+    for i in range(len(l)):
+        if l[i].name==item.name:
+            inTab = True
+            l[i].time=min(l[i].time,item.time)
+    if not inTab:    
+        l.append(item)
+    writePlayers(l)
+
 @app.route("/leaderboard")
 def leaderboard():
+
     return render_template("leaderboard.html", login_status="", table = readPlayers())
 
 
@@ -79,6 +101,8 @@ def login():
         if(first_name=="user"):
             
             result = f("Ad") #simCode.testCode()
+            if (result > 0): #if successful
+                appendPlayer(Item(first_name,result))
             return render_template("yay.html", run_time=str(result))
         # getting input with name = fname in HTML form
         # getting input with name = lname in HTML form
