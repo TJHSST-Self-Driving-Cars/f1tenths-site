@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+<h1>Leaderboard</h1> 
+<table align="center" id="comic">
+	<tr>
+
+      <td><b>Rank</b></td>
+      <td><b>Name</b></td>
+	<td><b>Time</b></td>
+
+    </tr>
+
+            {% for item in table %}
+    <tr>
+      <td>{{ item.rank }}</td>
+      <td>{{ item.name }}</td>
+	<td>{{ item.time }}</td>
+    </tr>
+{% endfor %}
+    </table> 
+    </body>
+</html>

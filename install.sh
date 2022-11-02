@@ -1,5 +1,5 @@
 #!/bin/sh
 cd simulator
 pip install --user -e gym
-pip install Flask Flask_assets
+pip install Flask Flask_assets pickle
 cd ..
