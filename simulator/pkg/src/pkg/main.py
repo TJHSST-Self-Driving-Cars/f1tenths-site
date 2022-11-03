@@ -129,8 +129,8 @@ class BlindRunner(object):
         while not done:
             if (time.time() - curr > 0.01):
                 #timeout
-                print("Timed out :(")
-                return -1
+                #print("Timed out :(")
+                return "Timed out :("
             else:
                 curr = time.time()
 
@@ -280,8 +280,9 @@ class TestRunner:
             speed = self.STRAIGHTS_SPEED
         return speed, steering_angle
 """
-def testCode():
-    return testInput(ans)
+
+def testCode(code):
+    return str(testInput(code))
 if __name__ == '__main__':
     print(testInput(ans))
     #runner = GymRunner(RACETRACK, drivers)

@@ -80,18 +80,26 @@ def appendPlayer(item):
         l.append(item)
     writePlayers(l)
 
-@app.route("/leaderboard")
+
+@app.route('/leaderboard', methods =["GET", "POST"])
 def leaderboard():
 
     return render_template("leaderboard.html", login_status="", table = readPlayers())
-
 
 
 @app.route("/")
 def homepage():
     return render_template("index.html", login_status="")
 
-@app.route('/', methods =["GET", "POST"])
+
+@app.route('/codesubmit', methods =["GET", "POST"])
+def codesubmit():
+    if request.method == "POST":
+        code = request.form.get("code_")
+        result = simCode.testCode(code)
+        return render_template("yay.html", run_time=result)
+
+@app.route('/index', methods =["GET", "POST"])
 def login():
     if request.method == "POST":
         
@@ -104,9 +112,12 @@ def login():
             if (result > 0): #if successful
                 appendPlayer(Item(first_name,result))
             return render_template("yay.html", run_time=str(result))
+        elif(first_name=="test"):
+            return render_template("codesubmit.html")
         # getting input with name = fname in HTML form
         # getting input with name = lname in HTML form
-    return render_template("index.html", login_status="Wrong username/password")
+        else:
+            return render_template("index.html", login_status="Wrong username/password")
 
 
 if __name__ == "__main__":
