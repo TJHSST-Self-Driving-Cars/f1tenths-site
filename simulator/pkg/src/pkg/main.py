@@ -127,13 +127,7 @@ class BlindRunner(object):
         start = time.time()
         curr = start
         while not done:
-            if (time.time() - curr > 0.01):
-                #timeout
-                #print("Timed out :(")
-                return "Timed out :("
-            else:
-                curr = time.time()
-
+            
             actions = []
             futures = []
             with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -160,7 +154,7 @@ class BlindRunner(object):
             
             #print(obs["collisions"])
             if (all(obs["collisions"])):
-                return None
+                return -1
             if (any(obs["lap_counts"])):
                 return laptime
             laptime += step_reward
@@ -173,7 +167,7 @@ class BlindRunner(object):
 #Class must be named "TestRunner"
 #returns a time (None if failed)
 #numpy autoimported as np
-def testInput(input, args = None):
+def testInputDaemon(input, outL, args = None):
     if (args):
         pass #do more stuff here i guess
     
@@ -189,7 +183,10 @@ def testInput(input, args = None):
     exec(byte_code, safe_globals, loc)
 
     runner = BlindRunner(RACETRACK, [ loc['TestRunner'] ])
-    return runner.run()
+    t = runner.run()
+
+    outL.value = t
+    return t
 
 ans = """
 class TestRunner:
