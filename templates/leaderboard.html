@@ -8,13 +8,22 @@
     </head>
     <body>
 <h1>Leaderboard</h1> 
+
+{% if run_time %}
+        {%if run_time != -1%}
+            <h4>Your code ran in {{run_time}} ticks.</h4>
+        {%else%}
+            <h4>Your code failed.</h4>
+        {% endif %}
+{% endif %}
+
 <table align="center" id="comic">
 	<tr>
 
       <td><b>Rank</b></td>
       <td><b>Name</b></td>
 	<td><b>Time</b></td>
-
+    
     </tr>
 
             {% for item in table %}
