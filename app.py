@@ -3,7 +3,7 @@ import multiprocessing
 import time
 import pickle
 from flask import Flask, render_template, request
-
+import traceback
 from flask_assets import Bundle, Environment
 import simulator.pkg.src.pkg.main as simCode
 
@@ -84,7 +84,14 @@ def appendPlayer(item):
 @app.route('/leaderboard', methods =["GET", "POST"])
 def leaderboard():
 
-    return render_template("leaderboard.html", login_status="", table = readPlayers())
+    if request.method == "POST":
+        return render_template("leaderboard.html", isLogged="", table = readPlayers())
+
+@app.route('/leaderboard2', methods =["GET", "POST"])
+def leaderboard2():
+
+    if request.method == "POST":
+        return render_template("leaderboard2.html", isLogged="", table = readPlayers())
 
 
 @app.route("/")
@@ -92,13 +99,24 @@ def homepage():
     return render_template("index.html", login_status="")
 
 
-@app.route('/codesubmit', methods =["GET", "POST"])
+@app.route('/yay', methods =["GET", "POST"])
 def codesubmit():
     if request.method == "POST":
         code = request.form.get("code_")
-        result = simCode.testCode(code)
-        return render_template("yay.html", run_time=result)
+        try:
+            result = simCode.testCode(code)
+            return render_template("yay.html", run_time=result)
 
+        except Exception as e:
+            
+            tb = traceback.format_exc()
+            return render_template("error.html", error_=tb)
+
+@app.route('/base', methods =["GET", "POST"])
+def homeFromLeaderboard():
+    
+    return render_template("base.html", login_status="" )
+        
 @app.route('/index', methods =["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -113,11 +131,24 @@ def login():
                 appendPlayer(Item(first_name,result))
             return render_template("yay.html", run_time=str(result))
         elif(first_name=="test"):
-            return render_template("codesubmit.html")
+            return render_template("home.html")
         # getting input with name = fname in HTML form
         # getting input with name = lname in HTML form
         else:
             return render_template("index.html", login_status="Wrong username/password")
+@app.route('/codesubmit', methods =["GET", "POST"])
+def toCode():
+    
+    if request.method == "POST":
+        return render_template("codesubmit.html")
+    
+    
+@app.route('/home', methods =["GET", "POST"])
+def back2home():
+    
+    if request.method == "POST":
+        return render_template("home.html")
+
 
 
 if __name__ == "__main__":
