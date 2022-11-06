@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,27 +8,37 @@
         <title>Document</title>
     </head>
     <body>
-        <p name="isLogged" value="isLogged" style="display: none">
-            {{ isLogged }}
-        </p>
-        <h1>Leaderboard</h1>
-        <table align="center" id="comic">
-            <tr>
-                <td><b>Rank</b></td>
-                <td><b>Name</b></td>
-                <td><b>Time</b></td>
-            </tr>
+<h1>Leaderboard</h1> 
+
+{% if run_time %}
+        {%if run_time != -1%}
+            <h4>Your code ran in {{run_time}} ticks.</h4>
+        {%else%}
+            <h4>Your code failed.</h4>
+        {% endif %}
+{% endif %}
+
+<table align="center" id="comic">
+	<tr>
+
+      <td><b>Rank</b></td>
+      <td><b>Name</b></td>
+	<td><b>Time</b></td>
+    
+    </tr>
 
             {% for item in table %}
-            <tr>
-                <td>{{ item.rank }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.time }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <form action='{{ url_for("homeFromLeaderboard")}}' method="POST">
-            <input type="submit" value="Back to Homepage" />
-        </form>
+    <tr>
+      <td>{{ item.rank }}</td>
+      <td>{{ item.name }}</td>
+	<td>{{ item.time }}</td>
+    </tr>
+{% endfor %}
+    </table> 
+    <form action='{{ url_for("back2home")}}' method="POST">
+        <input type="submit" value="Back to Homepage" />
+    </form>
     </body>
 </html>
+
+
