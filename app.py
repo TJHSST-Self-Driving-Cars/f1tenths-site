@@ -26,8 +26,8 @@ from user import User
 
 
 # Configuration
-GOOGLE_CLIENT_ID = "886442690079-alqevh0t0f5vgamvkvnogsm9m33vio1q.apps.googleusercontent.com" #os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = "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" #os.environ.get("GOOGLE_CLIENT_SECRET", None)
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
@@ -141,7 +141,7 @@ def codesubmit():
 
     code = request.form.get("code_")
 
-    result = simulate(simCode.ans)
+    result = simulate(code)
     #print(result,":D")
     if (result != -1):
         appendPlayer(Item(current_user.name, result)) #log result of the code run
